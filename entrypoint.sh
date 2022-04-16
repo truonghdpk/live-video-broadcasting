@@ -5,8 +5,8 @@ if [[ -z "$GRAB_URL" ]]; then
     exit 1
 fi
 
-if [[ -z "$STREAM_NAME" ]]; then
-    echo "Must provide STREAM_NAME in environment" 1>&2
+if [[ -z "$RTMP_URL" ]]; then
+    echo "Must provide RTMP_URL in environment" 1>&2
     exit 1
 fi
 
@@ -39,6 +39,5 @@ ffmpeg -thread_queue_size 512 -draw_mouse 0 \
     -f x11grab -r 30 -s 1280x720 -i :99 \
     -f alsa -ac 2 -i default \
     -vcodec libx264 -acodec aac -ab 256k \
-    -preset ultrafast -b:v $V_BITRATE -b:a $A_BITRATE -threads 0 \
-    -f rtsp rtsp://127.0.0.1:8554/$STREAM_NAME
-    # -f flv $RTMP_URL
+    -b:v $V_BITRATE -b:a $A_BITRATE -threads 0 \
+    -f flv $RTMP_URL
