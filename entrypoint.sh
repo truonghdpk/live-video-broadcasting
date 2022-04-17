@@ -24,7 +24,7 @@ pacmd set-default-source v1.monitor
 
 #--force-device-scale-factor=2
 xvfb-run --server-num 99 --server-args="-ac -screen 0 1280x720x24" \
-    google-chrome-stable --no-sandbox --disable-gpu \
+    google-chrome-stable --disable-gpu \
     --hide-scrollbars --disable-notifications \
     --disable-infobars --no-first-run \
     --lang="$LANGUAGE" \
@@ -38,6 +38,7 @@ sleep 10
 ffmpeg -thread_queue_size 512 -draw_mouse 0 \
     -f x11grab -r 30 -s 1280x720 -i :99 \
     -f alsa -ac 2 -i default \
-    -vcodec libx264 -acodec aac -ab 256k \
-    -b:v $V_BITRATE -b:a $A_BITRATE -threads 0 \
+    -vcodec libx264 -an \
+    -preset ultrafast -b:v $V_BITRATE -b:a $A_BITRATE \
+    -pix_fmt yuv420p \
     -f flv $RTMP_URL

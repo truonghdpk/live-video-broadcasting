@@ -65,3 +65,14 @@ $ docker run -it --rm \
       -e A_BITRATE="128K" \
       kolyadin/live-video-broadcasting
 ```
+
+
+export V_BITRATE="3000K"
+export A_BITRATE="128K"
+ffmpeg -thread_queue_size 512 -draw_mouse 0 \
+    -f x11grab -r 30 -s 1280x720 -i :99 \
+    -f alsa -ac 2 -i default \
+    -vcodec libx264 -acodec aac -ab 50k \
+    -pix_fmt yuv420p \
+    -preset ultrafast -b:v $V_BITRATE -b:a $A_BITRATE \
+    -f flv rtmp://192.168.40.4/video1
