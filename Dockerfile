@@ -1,19 +1,10 @@
-FROM debian:9-slim
-
-RUN apt-get update && apt-get install -y htop nano wget pulseaudio socat alsa-utils ffmpeg xvfb sudo
-
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-    && apt install -y ./google-chrome-stable_current_amd64.deb
-
+FROM kolyadin/live-video-broadcasting
 COPY default.pa /etc/pulse/
+RUN rm -rf /etc/entrypoint.sh
 COPY entrypoint.sh /var/
 
-RUN chmod +x /var/entrypoint.sh
-
-RUN useradd -ms /bin/bash webmaster \
-    && touch /etc/sudoers.d/webmaster \
-    && echo 'webmaster  ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/webmaster
-
+RUN sudo chmod +x /var/entrypoint.sh
+RUN sudo chmod -R 777 /var/entrypoint.sh
 USER webmaster
 WORKDIR /var
 
